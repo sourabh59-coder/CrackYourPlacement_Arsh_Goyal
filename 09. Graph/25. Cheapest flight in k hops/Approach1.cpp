@@ -1,15 +1,9 @@
-#include <vector>
-#include <queue>
-#include <utility>
-#include <limits.h>
-using namespace std;
-
 class Solution {
 public:
-    const int INF = 1e8;
+    const int INF = 1e9;
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
         // priority_queue will store {cost, {node, stops}}
-        priority_queue<pair<int, pair<int, int>>, vector<pair<int, pair<int, int>>>, greater<pair<int, pair<int, int>>>> qe;
+        queue<pair<int, pair<int, int>>> qe;
         
         // adj will store {destination, weight}
         vector<vector<pair<int, int>>> adj(n);
@@ -25,15 +19,15 @@ public:
         qe.push({0, {src, 0}});
 
         while(!qe.empty()) {
-            auto it = qe.top();
+            auto it = qe.front();
             qe.pop();
 
             int cost = it.first;
             int node = it.second.first;
             int stops = it.second.second;
 
-            if(node == dst) return cost;
-            if(stops > k) continue;
+            // if(node == dst) return cost;
+            if(stops==k+1) break;
 
             for(auto& child : adj[node]) {
                 int child_node = child.first;

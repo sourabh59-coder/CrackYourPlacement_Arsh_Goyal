@@ -1,33 +1,28 @@
 class Solution {
 public:
-    void fun(vector<int> &v,int ind,int n,vector<int> &temp,set<vector<int>> &an,int k)
-    {
-        if(ind==n)
-        {
-            if(k==0)
-            {
-                an.insert(temp);
-            }
-
+    void fun(vector<int> &v, int ind, int n, vector<int> &temp, vector<vector<int>> &ans, int k) {
+        if (k == 0) {
+            ans.push_back(temp);
             return;
         }
 
-        temp.push_back(v[ind]);
-        fun(v,ind+1,n,temp,an,k-v[ind]);
-        temp.pop_back();
-        fun(v,ind+1,n,temp,an,k);
+        for (int i = ind; i < n; ++i) {
+            if (i > ind && v[i] == v[i-1]) continue; // Skip duplicates
+
+            if (v[i] > k) break; // Prune search if element is greater than remaining target
+
+            temp.push_back(v[i]);
+            fun(v, i + 1, n, temp, ans, k - v[i]);
+            temp.pop_back();
+        }
     }
+
     vector<vector<int>> combinationSum2(vector<int>& v, int k) {
         int n = v.size();
         vector<vector<int>> ans;
-        set<vector<int>> an;
         vector<int> temp;
-        sort(v.begin(),v.end());
-        fun(v,0,n,temp,an,k);
-        for(auto it: an)
-        {
-            ans.push_back(it);
-        }
+        sort(v.begin(), v.end());
+        fun(v, 0, n, temp, ans, k);
         return ans;
     }
 };

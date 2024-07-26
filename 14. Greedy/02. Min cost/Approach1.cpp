@@ -1,34 +1,48 @@
-#include <bits/stdc++.h>
-#define int long long
-using namespace std;
+class Solution {
+public:
+    int minDeletions(string s) {
+        map<char,int> mp;
+        for(auto it: s)
+        {
+            mp[it]++;
+        }
 
-void solve()
-{
-    int n;
-    cin>>n;
+        priority_queue<int> qe;
+        for(auto it: mp)
+        {
+            qe.push(it.second);
+        }
 
-    vector<int> v(n);
-    for(int i=0;i<n;i++)    cin>>v[i];
+        int ans = 0;
+        int prev = -1;
 
-    int k;
-    cin>>k;
+        while(!qe.empty())
+        {
+            auto it = qe.top();
+            qe.pop();
 
-    sort(v.begin(),v.end());
+            // if(prev==0) break;
+            if(prev==-1)
+            {
+                prev = it;
+            }
+            else
+            {
+                if(it>prev)
+                {
+                    ans += (it-prev);
+                    it = prev;
+                }
+                if(it==0)   continue;
+                if(prev!=it)    prev = it;
+                else            
+                {
+                    ans++;
+                    prev = it-1;
+                }
+            }
+        }
 
-    int ans = 0;
-    
-    int i =0 ,j = n-1;
-    while(i<=j)
-    {
-        ans += v[i];
-        i++;
-        j -= k;
+        return ans;
     }
-
-    cout<<ans<<endl;
-}
-
-signed main()
-{
-    solve();
-}
+};
